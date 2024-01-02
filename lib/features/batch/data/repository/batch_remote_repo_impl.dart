@@ -6,14 +6,14 @@ import 'package:student_management_hive_api/features/batch/data/data_source/batc
 import 'package:student_management_hive_api/features/batch/domain/entity/batch_entity.dart';
 import 'package:student_management_hive_api/features/batch/domain/repository/batch_repository.dart';
 
-final batchRemoteRepositoryProvider = Provider.autoDispose<IBatchRepository>(
+final batchRemoterepositoryProvider = Provider.autoDispose<IBatchRepository>(
   (ref) => BatchRemoteRepoImpl(
-    batchRemoteDatSource: ref.read(BatchRemoteDatasourceProvider),
+    batchRemoteDatSource: ref.read(batchRemoteDatasourceProvider),
   ),
 );
 
 class BatchRemoteRepoImpl implements IBatchRepository {
-  final BatchRemoteDataSource batchRemoteDatSource;
+  final BatchRemoteDatSource batchRemoteDatSource;
 
   const BatchRemoteRepoImpl({required this.batchRemoteDatSource});
 
@@ -41,3 +41,6 @@ class BatchRemoteRepoImpl implements IBatchRepository {
     throw UnimplementedError();
   }
 }
+
+
+
