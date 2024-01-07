@@ -6,37 +6,58 @@ import 'package:student_management_hive_api/features/batch/domain/entity/batch_e
 import '../../../../core/network/hive_service.dart';
 import '../model/batch_hive_model.dart';
 
-final batchLocalDatasourceProvider = Provider.autoDispose<BatchLocalDataSource>(
-    (ref) => BatchLocalDataSource(
-        hiveService: ref.read(hiveServiceProvider),
-    ),
-);
+final batchLocalDatasourceProvider = Provider<BatchLocalDataSource>((ref) {
+  return BatchLocalDataSource(
+      hiveService: ref.read(hiveServiceProvider),
+      batchHiveModel: ref.read(batchHiveModelProvider));
+});
 
 class BatchLocalDataSource {
   final HiveService hiveService;
+  final BatchHiveModel batchHiveModel;
 
   BatchLocalDataSource({
     required this.hiveService,
+    required this.batchHiveModel,
   });
 
   // Add Batch
   Future<Either<Failure, bool>> addBatch(BatchEntity batch) async {
+  //   try {
+  //     // Convert BatchEntity to BatchHiveModel
+  //     BatchHiveModel batchHiveModel = BatchHiveModel.toHiveModel(batch);
+  //     hiveService.addBatch(batchHiveModel);
+  //     return const Right(true);
+  //   } catch (e) {
+  //     return Left(Failure(error: e.toString()));
+  //   }
+  // }
     try {
-      // Convert BatchEntity to BatchHiveModel
-      BatchHiveModel batchHiveModel = BatchHiveModel.toHiveModel(batch);
-      hiveService.addBatch(batchHiveModel);
+      // Convert Entity to Hive Object
+      final hiveBatch = batchHiveModel.toHiveModel(batch);
+      // Add to Hive
+      await hiveService.addBatch(hiveBatch);
       return const Right(true);
     } catch (e) {
       return Left(Failure(error: e.toString()));
     }
   }
-
   Future<Either<Failure, List<BatchEntity>>> getAllBatches() async {
-    try {
-      List<BatchHiveModel> batches = await hiveService.getAllBatches();
+  //   try {
+  //     List<BatchHiveModel> batches = await hiveService.getAllBatches();
+  //     // Convert Hive Object to Entity
+  //     List<BatchEntity> batchEntities =
+  //     batches.map((e) => BatchHiveModel.toEntity(e)).toList();
+  //     return Right(batchEntities);
+  //   } catch (e) {
+  //     return Left(Failure(error: e.toString()));
+  //   }
+  // }
+      try {
+      // Get all batches from Hive
+      final batches = await hiveService.getAllBatches();
       // Convert Hive Object to Entity
-      List<BatchEntity> batchEntities =
-      batches.map((e) => BatchHiveModel.toEntity(e)).toList();
+      final batchEntities = batchHiveModel.toEntityList(batches);
       return Right(batchEntities);
     } catch (e) {
       return Left(Failure(error: e.toString()));

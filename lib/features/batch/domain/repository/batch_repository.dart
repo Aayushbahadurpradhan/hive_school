@@ -11,6 +11,7 @@ import 'package:student_management_hive_api/features/batch/domain/entity/batch_e
 //internet chaina bhane local bata tanne
 // return ref.read(batchLocalRepositoryProvider);
 // return ref.read(batchRemoterepositoryProvider);
+
 final batchRepositoryProvider = Provider.autoDispose<IBatchRepository>((ref) {
   if (ref.watch(connectivityStatusProvider) == ConnectivityStatus.isConnected) {
     return ref.read(batchRemoterepositoryProvider);

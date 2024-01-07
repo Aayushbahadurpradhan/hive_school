@@ -1,10 +1,16 @@
-import 'package:hive_flutter/hive_flutter.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hive/hive.dart';
 import 'package:student_management_hive_api/config/constants/hive_table_constant.dart';
+import 'package:student_management_hive_api/features/auth/domain/entity/auth_entity.dart';
 import 'package:student_management_hive_api/features/batch/data/model/batch_hive_model.dart';
 import 'package:student_management_hive_api/features/course/data/model/course_hive_model.dart';
 import 'package:uuid/uuid.dart';
 
 part 'auth_hive_model.g.dart';
+
+final authHiveModelProvider = Provider(
+  (ref) => AuthHiveModel.empty(),
+);
 
 @HiveType(typeId: HiveTableConstant.studentTableId)
 class AuthHiveModel {
@@ -56,6 +62,34 @@ class AuthHiveModel {
           username: '',
           password: '',
         );
+
+  // Convert Hive Object to Entity
+  AuthEntity toEntity() => AuthEntity(
+        id: studentId,
+        fname: fname,
+        lname: lname,
+        phone: phone,
+        batch: batch.toEntity(),
+        courses: CourseHiveModel.empty().toEntityList(courses),
+        username: username,
+        password: password,
+      );
+
+  // Convert Entity to Hive Object
+  AuthHiveModel toHiveModel(AuthEntity entity) => AuthHiveModel(
+        studentId: const Uuid().v4(),
+        fname: entity.fname,
+        lname: entity.lname,
+        phone: entity.phone,
+        batch: BatchHiveModel.empty().toHiveModel(entity.batch!),
+        courses: CourseHiveModel.empty().toHiveModelList(entity.courses),
+        username: entity.username,
+        password: entity.password,
+      );
+
+  // Convert Entity List to Hive List
+  List<AuthHiveModel> toHiveModelList(List<AuthEntity> entities) =>
+      entities.map((entity) => toHiveModel(entity)).toList();
 
   @override
   String toString() {

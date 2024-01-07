@@ -22,7 +22,27 @@ class CourseRemoteDataSource {
   CourseRemoteDataSource({
     required this.dio,
   });
-
+  Future<Either<Failure, bool>> addCourse(CourseEntity course) async {
+    try {
+      CourseAPIModel courseAPIModel = CourseAPIModel.fromEntity(course);
+      var response = await dio.post(
+        ApiEndpoints.createCourse,
+        data: courseAPIModel.toJson(),
+      );
+      if (response.statusCode == 201) {
+        return const Right(true);
+      } else {
+        return Left(
+          Failure(
+            error: response.statusMessage.toString(),
+            statusCode: response.statusCode.toString(),
+          ),
+        );
+      }
+    } on DioException catch (e) {
+      return Left(Failure(error: e.response?.data['message']));
+    }
+  }
   Future<Either<Failure, List<CourseEntity>>> getAllCourses() async {
     try {
       var response = await dio.get(ApiEndpoints.getAllCourse);

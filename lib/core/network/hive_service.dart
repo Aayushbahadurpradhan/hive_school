@@ -46,7 +46,27 @@ class HiveService {
   //   var box = await Hive.openBox<BatchHiveModel>(HiveTableConstant.batchBox);
   //   await box.put(batchId, updatedBatch);
   // }
+  // ======================== Student Queries ========================
+  Future<void> addStudent(AuthHiveModel student) async {
+    var box = await Hive.openBox<AuthHiveModel>(HiveTableConstant.studentBox);
+    await box.put(student.studentId, student);
+  }
 
+  Future<List<AuthHiveModel>> getAllStudents() async {
+    var box = await Hive.openBox<AuthHiveModel>(HiveTableConstant.studentBox);
+    var students = box.values.toList();
+    box.close();
+    return students;
+  }
+
+  //Login
+  Future<AuthHiveModel?> login(String username, String password) async {
+    var box = await Hive.openBox<AuthHiveModel>(HiveTableConstant.studentBox);
+    var student = box.values.firstWhere((element) =>
+        element.username == username && element.password == password);
+    box.close();
+    return student;
+  }
   // ======================== Course Queries ========================
   Future<void> addCourse(CourseHiveModel course) async {
     var box = await Hive.openBox<CourseHiveModel>(HiveTableConstant.courseBox);

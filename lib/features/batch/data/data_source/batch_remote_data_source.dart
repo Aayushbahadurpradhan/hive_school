@@ -9,7 +9,7 @@
 //         (ref) => BatchRemoteDataSource());
 
 // class BatchRemoteDataSource {
-  
+
 //   Future<Either<Failure, List<BatchEntity>>> getAllBatches() async {
 //     try {
 //       List<BatchEntity> lstBatchEntity = [
@@ -24,8 +24,6 @@
 //     }
 //   }
 // }
-
-
 
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
@@ -49,11 +47,33 @@ class BatchRemoteDatSource {
 
   BatchRemoteDatSource({required this.dio});
 
+  //add Batch
+  Future<Either<Failure, bool>> addBatch(BatchEntity batch) async {
+    try {
+      BatchAPIModel batchAPIModel = BatchAPIModel.fromEntity(batch);
+      var response = await dio.post(
+        ApiEndpoints.createBatch,
+        data: batchAPIModel.toJson(),
+      );
+      if (response.statusCode == 201) {
+        return const Right(true);
+      } else {
+        return Left(
+          Failure(
+            error: response.statusMessage.toString(),
+            statusCode: response.statusCode.toString(),
+          ),
+        );
+      }
+    } on DioException catch (e) {
+      return Left(Failure(error: e.response?.data['message']));
+    }
+  }
+
   Future<Either<Failure, List<BatchEntity>>> getAllBatches() async {
     try {
       var response = await dio.get(ApiEndpoints.getAllBatch);
       if (response.statusCode == 200) {
-       
         GetAllBatchDTO batchAddDTO = GetAllBatchDTO.fromJson(response.data);
         // Convert BatchAPIModel to BatchEntity
         List<BatchEntity> batchList = batchAddDTO.data

@@ -19,8 +19,7 @@ class BatchRemoteRepoImpl implements IBatchRepository {
 
   @override
   Future<Either<Failure, bool>> addBatch(BatchEntity batch) {
-    // TODO: implement addBatch
-    throw UnimplementedError();
+    return batchRemoteDatSource.addBatch(batch);
   }
 
   @override
@@ -31,16 +30,11 @@ class BatchRemoteRepoImpl implements IBatchRepository {
   @override
   Future<Either<Failure, List<AuthEntity>>> getAllStudentsByBatch(
       String batchId) {
-    // TODO: implement getAllStudentsByBatch
     throw UnimplementedError();
   }
-  
+
   @override
   Future<Either<Failure, bool>> deleteBatch(String batchId) {
-    // TODO: implement deleteBatch
     throw UnimplementedError();
   }
 }
-
-
-

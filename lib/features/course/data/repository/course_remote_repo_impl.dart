@@ -19,8 +19,7 @@ class CourseRemoteRepoImpl implements ICourseRepository {
 
   @override
   Future<Either<Failure, bool>> addCourse(CourseEntity course) {
-    // TODO: implement addcourse
-    throw UnimplementedError();
+    return courseRemoteDatSource.addCourse(course);
   }
 
   @override
@@ -39,4 +38,4 @@ class CourseRemoteRepoImpl implements ICourseRepository {
     // TODO: implement deletecourse
     throw UnimplementedError();
   }
- }
+}
