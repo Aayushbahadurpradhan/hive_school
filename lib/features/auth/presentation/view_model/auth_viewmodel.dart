@@ -76,7 +76,7 @@ class AuthViewModel extends StateNotifier<AuthState> {
   //   );
   // }
 
-  // void resetMessage(bool value) {
-  //   state = state.copyWith(showMessage: value);
-  // }
+  void resetMessage(bool value) {
+    state = state.copyWith(showMessage: value);
+  }
 }
