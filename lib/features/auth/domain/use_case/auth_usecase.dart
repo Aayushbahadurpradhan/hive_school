@@ -1,9 +1,13 @@
 import 'dart:io';
 
 import 'package:dartz/dartz.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:student_management_hive_api/core/failure/failure.dart';
 import 'package:student_management_hive_api/features/auth/domain/entity/auth_entity.dart';
 import 'package:student_management_hive_api/features/auth/domain/repository/auth_repository.dart';
+final authUseCaseProvider = Provider((ref) {
+  return AuthUseCase(ref.read(authRepositoryProvider));
+});
 
 class AuthUseCase {
   final IAuthRepository _authRepository;

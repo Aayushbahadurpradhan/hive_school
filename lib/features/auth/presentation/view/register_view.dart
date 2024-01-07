@@ -309,7 +309,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:student_management_hive_api/core/common/provider/is_network_provider.dart';
-import 'package:student_management_hive_api/core/common/snackbar/my_snackbar.dart';
+import 'package:student_management_hive_api/features/auth/presentation/view_model/auth_viewmodel.dart';
 import 'package:student_management_hive_api/features/batch/domain/entity/batch_entity.dart';
 import 'package:student_management_hive_api/features/batch/presentation/view_model/batch_view_model.dart';
 import 'package:student_management_hive_api/features/course/domain/entity/course_entity.dart';
@@ -351,7 +351,7 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
       final image = await ImagePicker().pickImage(source: imageSource);
       if (image != null) {
         _img = File(image.path);
-        //ref.read(authViewModelProvider.notifier).uploadImage(_img!);
+        ref.read(authViewModelProvider.notifier).uploadImage(_img!);
       } else {
         return;
       }
