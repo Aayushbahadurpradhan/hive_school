@@ -895,17 +895,18 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
                       onPressed: () {
                         if (_key.currentState!.validate()) {
                           final entity = AuthEntity(
-                            fname: _fnameController.text,
-                            lname: _lnameController.text,
-                            phone: _phoneController.text,
+                            fname: _fnameController.text.trim(),
+                            lname: _lnameController.text.trim(),
+                            phone: _phoneController.text.trim(),
                             batch: selectedBatch!,
                             courses: _lstCourseSelected,
-                            username: _usernameController.text,
+                            image: ref.read(authViewModelProvider).imageName??'',
+                            username: _usernameController.text.trim().toLowerCase(),
                             password: _passwordController.text,
                           );
                           // Register user
-                          ref.read(authViewModelProvider.notifier);
-                          // .registerStudent(entity);
+                          ref.read(authViewModelProvider.notifier)
+                          .registerStudent(entity);
                         }
                       },
                       child: const Text('Register'),

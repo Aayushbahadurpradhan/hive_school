@@ -12,7 +12,6 @@
 //   factory BatchAPIModel.fromJson(Map<String,dynamic)
 // }
 
-
 import 'package:json_annotation/json_annotation.dart';
 import 'package:student_management_hive_api/features/batch/domain/entity/batch_entity.dart';
 
@@ -43,6 +42,7 @@ class BatchAPIModel {
   // From entity to model
   factory BatchAPIModel.fromEntity(BatchEntity entity) {
     return BatchAPIModel(
+      batchId: entity.batchId,
       batchName: entity.batchName,
     );
   }

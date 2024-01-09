@@ -81,7 +81,7 @@ class AuthHiveModel {
         fname: entity.fname,
         lname: entity.lname,
         phone: entity.phone,
-        batch: BatchHiveModel.empty().toHiveModel(entity.batch!),
+        batch: BatchHiveModel.empty().toHiveModel(entity.batch),
         courses: CourseHiveModel.empty().toHiveModelList(entity.courses),
         username: entity.username,
         password: entity.password,

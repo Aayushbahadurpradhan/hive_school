@@ -8,7 +8,6 @@ import 'package:student_management_hive_api/features/course/data/dto/get_all_cou
 import 'package:student_management_hive_api/features/course/data/model/course_api_model.dart';
 import 'package:student_management_hive_api/features/course/domain/entity/course_entity.dart';
 
-
 final courseRemoteDataSourceProvider =
     Provider.autoDispose<CourseRemoteDataSource>(
   (ref) => CourseRemoteDataSource(
@@ -43,6 +42,7 @@ class CourseRemoteDataSource {
       return Left(Failure(error: e.response?.data['message']));
     }
   }
+
   Future<Either<Failure, List<CourseEntity>>> getAllCourses() async {
     try {
       var response = await dio.get(ApiEndpoints.getAllCourse);
@@ -50,7 +50,7 @@ class CourseRemoteDataSource {
         GetAllCourseDTO courseAddDTO = GetAllCourseDTO.fromJson(response.data);
         // Convert courseAPIModel to courseEntity
         List<CourseEntity> courseList = courseAddDTO.data
-            .map((course) =>CourseAPIModel.toEntity(course))
+            .map((course) => CourseAPIModel.toEntity(course))
             .toList();
 
         return Right(courseList);
