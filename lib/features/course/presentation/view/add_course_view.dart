@@ -104,19 +104,43 @@ class _AddCourseViewState extends ConsumerState<AddCourseView> {
                           trailing: IconButton(
                             icon: const Icon(Icons.delete),
                             onPressed: () {
-                              ref
-                                  .read(courseViewModelProvider.notifier)
-                                  .deleteCourse(courseState.courses[index].courseId ?? 'Not deleted');
+                              showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  title: Text(
+                                      'Are you sure you want to delete ${courseState.courses[index].courseName} ?'),
+                                  actions: [
+                                    TextButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: const Text('No')),
+                                    TextButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                          ref
+                                              .read(courseViewModelProvider
+                                                  .notifier)
+                                              .deleteCourse(courseState
+                                                      .courses[index]
+                                                      .courseId ??
+                                                  'Not deleted');
+                                        },
+                                        child: const Text('Yes'))
+                                  ],
+                                ),
+                              );
+                              // ref
+                              //     .read(courseViewModelProvider.notifier)
+                              //     .deleteCourse(
+                              //         courseState.courses[index].courseId ??
+                              //             'Not deleted');
                             },
                           ),
                         );
                       },
                     ),
                   ),
-
-            // batchState.showMessage
-            //     ? showSnackBar(message: 'Batch Added', context: context)
-
           ],
         ),
       ),

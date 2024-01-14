@@ -4,7 +4,8 @@ class ApiEndpoints {
   static const Duration connectionTimeout = Duration(seconds: 1000);
   static const Duration receiveTimeout = Duration(seconds: 1000);
   // For Windows
-  static const String baseUrl = "http://172.26.2.119:3000/api/v1/";
+  static const String baseUrl = "http://172.26.0.139:3000/api/v1/";
+  static  String token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1YTAxODA3YWE5YTg2NWJkMWE5NTBhNSIsImlhdCI6MTcwNTIwNjUyNSwiZXhwIjoxNzA3Nzk4NTI1fQ.Wss9d1A-qCog5ggQK1WywaLvopFECK7HJytJG1ho6z8";
   // For MAC
   // static const String baseUrl = "http://localhost:3000/api/v1/";
   //static const String baseUrl = "http://192.168.4.4:3000/api/v1/";
