@@ -4,7 +4,7 @@ class ApiEndpoints {
   static const Duration connectionTimeout = Duration(seconds: 1000);
   static const Duration receiveTimeout = Duration(seconds: 1000);
   // For Windows
-  static const String baseUrl = "http://10.0.2.2:3000/api/v1/";
+  static const String baseUrl = "http://172.26.2.119:3000/api/v1/";
   // For MAC
   // static const String baseUrl = "http://localhost:3000/api/v1/";
   //static const String baseUrl = "http://192.168.4.4:3000/api/v1/";
@@ -29,4 +29,3 @@ class ApiEndpoints {
   static const String deleteCourse = "course/";
   static const String getAllCourse = "course/getAllCourse";
 }
-
