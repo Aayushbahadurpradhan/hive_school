@@ -44,7 +44,6 @@ final batchRemoteDatasourceProvider =
 
 class BatchRemoteDatSource {
   final Dio dio;
-
   BatchRemoteDatSource({required this.dio});
 
   //add Batch
@@ -69,10 +68,46 @@ class BatchRemoteDatSource {
       return Left(Failure(error: e.response?.data['message']));
     }
   }
-
-  Future<Either<Failure, List<BatchEntity>>> getAllBatches() async {
+  
+  Future<Either<Failure, bool>> deleteBatch(String batchId) async {
     try {
-      var response = await dio.get(ApiEndpoints.getAllBatch);
+      Response response = await dio.delete(
+        ApiEndpoints.deleteBatch + batchId,
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer ${ApiEndpoints.token}',
+          },
+        ),
+      );
+      if (response.statusCode == 200) {
+        return const Right(true);
+      } else {
+        return Left(
+          Failure(
+            error: response.data["message"],
+            statusCode: response.statusCode.toString(),
+          ),
+        );
+      }
+    } on DioException catch (e) {
+      return Left(
+        Failure(
+          error: e.error.toString(),
+          statusCode: e.response?.statusCode.toString() ?? '0',
+        ),
+      );
+    }
+  }
+
+  Future<Either<Failure, List<BatchEntity>>> getAllBatches(int page) async {
+    try {
+      var response = await dio.get(
+        ApiEndpoints.getAllBatch,
+                queryParameters: {
+          '_page': page,
+          '_limit': ApiEndpoints.limitPage,
+        },
+        );
       if (response.statusCode == 200) {
         GetAllBatchDTO batchAddDTO = GetAllBatchDTO.fromJson(response.data);
         // Convert BatchAPIModel to BatchEntity

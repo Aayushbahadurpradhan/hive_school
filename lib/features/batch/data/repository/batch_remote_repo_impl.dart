@@ -24,7 +24,7 @@ class BatchRemoteRepoImpl implements IBatchRepository {
 
   @override
   Future<Either<Failure, List<BatchEntity>>> getAllBatches() {
-    return batchRemoteDatSource.getAllBatches();
+    return batchRemoteDatSource.getAllBatches(10);
   }
 
   @override
@@ -35,6 +35,6 @@ class BatchRemoteRepoImpl implements IBatchRepository {
 
   @override
   Future<Either<Failure, bool>> deleteBatch(String batchId) {
-    throw UnimplementedError();
+    return batchRemoteDatSource.deleteBatch(batchId);
   }
 }
