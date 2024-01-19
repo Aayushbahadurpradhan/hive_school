@@ -4,7 +4,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:student_management_hive_api/config/router/app_route.dart';
 import 'package:student_management_hive_api/core/common/snackbar/my_snackbar.dart';
+import 'package:student_management_hive_api/core/shared_prefs/user_shared_prefs.dart';
+import 'package:student_management_hive_api/features/auth/domain/repository/auth_repository.dart';
+import 'package:student_management_hive_api/features/auth/domain/use_case/login_usecase.dart';
 import 'package:student_management_hive_api/features/auth/presentation/view_model/auth_viewmodel.dart';
+
+final userSharedPrefsProvider = Provider<UserSharedPrefs>((ref) {
+  return UserSharedPrefs();
+});
+
+final loginUseCaseProvider = Provider.autoDispose<LoginUseCase>(
+  (ref) => LoginUseCase(
+    ref.watch(authRepositoryProvider),
+    ref.watch(userSharedPrefsProvider),
+  ),
+);
 
 class LoginView extends ConsumerStatefulWidget {
   const LoginView({super.key});
@@ -17,11 +31,9 @@ class _LoginViewState extends ConsumerState<LoginView> {
   final _formKey = GlobalKey<FormState>();
   final _usernameController = TextEditingController(text: 'kiran');
   final _passwordController = TextEditingController(text: 'kiran123');
-
-  // final _usernameController = TextEditingController();
-  // final _passwordController = TextEditingController();
   final _gap = const SizedBox(height: 8);
   bool isObscure = true;
+
   @override
   Widget build(BuildContext context) {
     final authState = ref.watch(authViewModelProvider);
@@ -31,6 +43,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
         ref.read(authViewModelProvider.notifier).resetMessage(false);
       }
     });
+
     return Scaffold(
       body: SafeArea(
         child: Form(
@@ -84,15 +97,28 @@ class _LoginViewState extends ConsumerState<LoginView> {
                     _gap,
                     ElevatedButton(
                       onPressed: () async {
-                        // Navigator.pushNamed(context, AppRoute.homeRoute);
                         if (_formKey.currentState!.validate()) {
-                          await ref
-                              .read(authViewModelProvider.notifier)
+                          final loginResult = await ref
+                              .read(loginUseCaseProvider)
                               .loginStudent(
-                                context,
                                 _usernameController.text,
                                 _passwordController.text,
                               );
+
+                          loginResult.fold(
+                            (failure) {
+                              // Handle login failure
+                              showSnackBar(message: failure.error, context: context);
+                            },
+                            (success) {
+                              // Navigate to homeRoute on successful login
+                              if (success) {
+                                Navigator.pushNamed(context, AppRoute.homeRoute);
+                              } else {
+                                showSnackBar(message: 'Login failed', context: context);
+                              }
+                            },
+                          );
                         }
                       },
                       child: const SizedBox(
