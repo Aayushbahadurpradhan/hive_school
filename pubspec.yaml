@@ -54,6 +54,9 @@ dependencies:
   awesome_dio_interceptor: ^1.0.0
   permission_handler: ^11.1.0
   image_picker: ^1.0.6
+  mockito: ^5.4.4
+  integration_test:
+    sdk: flutter
 
 dev_dependencies:
   flutter_test:
